@@ -1,13 +1,14 @@
 name: Django CI
 
 on:
-  label:
-    types:
-      - "ready for QA"
+  pull_request:
+    branches:
+      - master
+    types: [ labeled ]
 
 jobs:
   build:
-
+    if: ${{ github.event.label.name == 'ready for QA' }}
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
