@@ -28,3 +28,20 @@ jobs:
     - name: Run Tests
       run: |
         python manage.py test
+
+  labelChanger:
+      dependencies: 
+        - build
+      - name: remove labels
+          uses: actions-ecosystem/action-remove-labels@v1
+          if: env.BASE_BRANCH == 'master'
+          with:
+            github_token: ${{ github.token }}
+            labels: ready for QA
+      - name: add labels
+        uses: actions-ecosystem/action-add-labels@v1
+        if: env.BASE_BRANCH == 'master'
+        with:
+          github_token: ${{ github.token }}
+          labels: In QA
+      
