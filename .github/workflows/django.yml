@@ -6,11 +6,7 @@ on:
       - master
     types: [ labeled ]
 
-  workflow_dispatch:
-    inputs:
-      pull-request:
-        description: Pull Request Number
-        required: false
+  
 
 jobs:
   build:
@@ -41,11 +37,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: remove labels
-          uses: actions-ecosystem/action-remove-labels@v1
-          if: env.BASE_BRANCH == 'master'
-          with:
-            github_token: ${{ github.token }}
-            labels: ready for QA
+        uses: actions-ecosystem/action-remove-labels@v1
+        if: env.BASE_BRANCH == 'master'
+        with:
+          github_token: ${{ github.token }}
+          labels: ready for QA
       - name: add labels
         uses: actions-ecosystem/action-add-labels@v1
         if: env.BASE_BRANCH == 'master'
@@ -54,6 +50,11 @@ jobs:
           labels: In QA
 
   automerge:
+    workflow_dispatch:
+    inputs:
+      pull-request:
+        description: Pull Request Number
+        required: false
     runs-on: ubuntu-latest
     steps:
       - uses: reitermarkus/automerge@v2
@@ -64,4 +65,3 @@ jobs:
           required-labels: 'In QA'
           pull-request: ${{ github.event.inputs.pull-request }}
           dry-run: true
-      
